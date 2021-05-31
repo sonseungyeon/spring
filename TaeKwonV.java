@@ -1,4 +1,4 @@
-package mySpring.ex04;
+package MySpring.ex03;
 
 public class TaeKwonV {
 //	punch attack , missail attack 둘다 사용 가능하도록 attack을 선언

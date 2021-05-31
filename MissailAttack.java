@@ -1,4 +1,4 @@
-package mySpring.ex04;
+package MySpring.ex03;
 
 public class MissailAttack implements Attack{
 	@Override

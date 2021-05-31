@@ -1,4 +1,4 @@
-package mySpring.ex04;
+package MySpring.ex03;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.GenericXmlApplicationContext;
