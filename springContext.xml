@@ -3,21 +3,18 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-	<!-- 리스트 관련 아이를 추가하는 방법 -->
-	<bean id = "foods" class="mySpring.ex02.FavoritFoods">
-		<constructor-arg>
-		<!-- 객체를 만들때 이 리스트가 추가되어 생성됨 -->
-			<list>
-				<value>자장면</value>
-				<value>짬뽕</value>
-				<value>볶음밥</value>
-			</list>
-		</constructor-arg>
-	</bean>
+<bean id="taeKwonV" class="MySpring.ex03.TaeKwonV">
+	<constructor-arg ref="punchAttack"></constructor-arg>
+	<constructor-arg value="태권브이"></constructor-arg>
+</bean>
+
+<bean id="transformer" class="MySpring.ex03.Transformer">
+<!-- setattack을 호출해서 missailAttack을 넣어준다. -->
+	<property name="attack" ref="missailAttack"></property>
+	<property name="name" value="트랜스포머"></property>
+</bean>
 	
-	<bean id="user" class="mySpring.ex02.User">
-		<property name="name" value="gaga"></property>
-		<property name="age" value="20"></property>
-		<property name="favoritFoods" ref="foods"></property>
-	</bean>
+<bean id="punchAttack" class="MySpring.ex03.PunchAttack"></bean>
+<bean id="missailAttack" class="MySpring.ex03.MissailAttack"></bean>
+
 </beans>
