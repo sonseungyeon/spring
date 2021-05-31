@@ -3,18 +3,31 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-<bean id="taeKwonV" class="MySpring.ex03.TaeKwonV">
-	<constructor-arg ref="punchAttack"></constructor-arg>
-	<constructor-arg value="태권브이"></constructor-arg>
-</bean>
-
-<bean id="transformer" class="MySpring.ex03.Transformer">
-<!-- setattack을 호출해서 missailAttack을 넣어준다. -->
-	<property name="attack" ref="missailAttack"></property>
-	<property name="name" value="트랜스포머"></property>
-</bean>
-	
+ <!--
+		PunchAttack punchAttack = new PunchAttack();
+		MissailAttack missailAttack = new MissailAttack();
+  -->
 <bean id="punchAttack" class="MySpring.ex03.PunchAttack"></bean>
 <bean id="missailAttack" class="MySpring.ex03.MissailAttack"></bean>
 
+<bean id="Student" class="MySpring.ex02.Student"></bean>
+
+<!-- 
+		TaeKwonV taeKwonV = new TaeKwonV(punchAttack, "name"); 
+ -->
+<bean id="taeKwonV" class="MySpring.ex03.TaeKwonV">
+	<constructor-arg ref="punchAttack">
+	</constructor-arg>
+	<constructor-arg value="name">
+	</constructor-arg>
+</bean>
+
+<!-- 
+		Transformer transformer = new Transformer();
+		transformer.setAttack(missailAttack);
+ -->
+<bean id="transformer" class="MySpring.ex03.Transformer">
+<!-- ref는 기본자료형을 제외하고 객체를 가져올 때 사용 -->
+	<property name="attack" ref="missailAttack"></property>
+</bean>
 </beans>
