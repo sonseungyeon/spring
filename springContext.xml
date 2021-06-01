@@ -6,32 +6,27 @@
 		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd">
 
 	<!-- 필요한 객체를 빈으로 등록 -->
-	<bean class="spring03.aop.ex02.Boy" id ="boy"/>
-	<bean class="spring03.aop.ex02.Girl" id="girl"/>
-	<bean class="spring03.aop.ex02.Robot" id="robot"/>
+	<bean class="spring03.aop.ex.Gugudan" id ="gugudan"/>
 	
 	<!-- 공통관심사항으로 쓸 객체도 빈으로 등록 -->
-	<bean class="spring03.aop.ex02.MyAspect" id ="myAspect"></bean>
+	<bean class="spring03.aop.ex.GugudanAspect" id ="gugudanAspect"></bean>
 	
 	<!-- aspect로 등록을 따로 해줘야 한다 -->
 	<aop:config>
-		<aop:aspect ref="myAspect">
+		<aop:aspect ref="gugudanAspect">
 			<!-- 핵심기능의 언제 공통관심사항을 붙일꺼냐를 설정 -->
-			<aop:pointcut expression="execution(public String *.doSomething())" id="myPt"/>
+			<aop:pointcut expression="execution(public String *.gugudanPrint())" id="guguPt"/>
 			<!-- 어느 타임에 실행할꺼냐? 이전, 이후 정상종료, 예외 -->
-			<aop:before method="beforeDoSomething" pointcut-ref="myPt"/>
+			<aop:before method="beforeTime" pointcut-ref="guguPt"/>
 			
-			<!-- 메서드가 실행 된 후 -->
-			<aop:after method="afterDoSomething" pointcut-ref="myPt"/>
+			<!-- 메서드가 실행 된 후 성공을안해도 출력됨 -->
+			<aop:after method="afterTime" pointcut-ref="guguPt"/>
 			
-			<!-- 리턴이후 -->
-			<aop:after-returning method="afterReturn" returning="msg" pointcut-ref="myPt"/>
+			<!-- 리턴이후 메서드가 정상적으로 실행을 마쳤을 때 -->
+			<aop:after-returning method="afterTimeReturn" returning="msg" pointcut-ref="guguPt"/>
 			
 			<!-- 예외가 발생하고 나서 -->
-			<aop:after-throwing method="afterThrowing" throwing="th" pointcut-ref="myPt"/>
-			
-			<!-- 핵심기능을 둘러싼다 -->
-			<!-- <aop:around method="myAround" pointcut="execution(public String *.fight())"/> -->
+			<aop:after-throwing method="afterTimeThrowing" throwing="th" pointcut-ref="guguPt"/>
 		</aop:aspect>
 	</aop:config>
 </beans>
