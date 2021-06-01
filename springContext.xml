@@ -1,20 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd">
 
-<bean id="taeKwonV" class="MySpring.ex03.TaeKwonV">
-	<constructor-arg ref="punchAttack"></constructor-arg>
-	<constructor-arg value="태권브이"></constructor-arg>
-</bean>
-
-<bean id="transformer" class="MySpring.ex03.Transformer">
-<!-- setattack을 호출해서 missailAttack을 넣어준다. -->
-	<property name="attack" ref="missailAttack"></property>
-	<property name="name" value="트랜스포머"></property>
-</bean>
+	<!-- 필요한 객체를 빈으로 등록 -->
+	<bean class="spring03.aop.ex02.Boy" id ="boy"/>
+	<bean class="spring03.aop.ex02.Girl" id="girl"/>
+	<bean class="spring03.aop.ex02.Robot" id="robot"/>
 	
-<bean id="punchAttack" class="MySpring.ex03.PunchAttack"></bean>
-<bean id="missailAttack" class="MySpring.ex03.MissailAttack"></bean>
-
+	<!-- 공통관심사항으로 쓸 객체도 빈으로 등록 -->
+	<bean class="spring03.aop.ex02.MyAspect" id ="myAspect"></bean>
+	
+	<!-- aspect로 등록을 따로 해줘야 한다 -->
+	<aop:config>
+		<aop:aspect ref="myAspect">
+			<!-- 핵심기능의 언제 공통관심사항을 붙일꺼냐를 설정 -->
+			<aop:pointcut expression="execution(public String *.doSomething())" id="myPt"/>
+			<!-- 어느 타임에 실행할꺼냐? 이전, 이후 정상종료, 예외 -->
+			<aop:before method="beforeDoSomething" pointcut-ref="myPt"/>
+			
+			<!-- 메서드가 실행 된 후 -->
+			<aop:after method="afterDoSomething" pointcut-ref="myPt"/>
+			
+			<!-- 리턴이후 -->
+			<aop:after-returning method="afterReturn" returning="msg" pointcut-ref="myPt"/>
+			
+			<!-- 예외가 발생하고 나서 -->
+			<aop:after-throwing method="afterThrowing" throwing="th" pointcut-ref="myPt"/>
+			
+			<!-- 핵심기능을 둘러싼다 -->
+			<!-- <aop:around method="myAround" pointcut="execution(public String *.fight())"/> -->
+		</aop:aspect>
+	</aop:config>
 </beans>
