@@ -1,40 +1,54 @@
-package spring03.aop.ex02;
+package spring03.aop.ex03.annotation;
 
+import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.After;
+import org.aspectj.lang.annotation.AfterReturning;
+import org.aspectj.lang.annotation.AfterThrowing;
+import org.aspectj.lang.annotation.Around;
+import org.aspectj.lang.annotation.Before;
+import org.springframework.stereotype.Component;
 
+@Component
+@Aspect
 public class MyAspect {
-	public void beforeDoSomething() {
-		System.out.println("문을 세게 열고 집에 들어간다.");
-	}
-	public void afterDoSomething() {
-		System.out.println("문을 닫고 집을 나온다.");
-	}
+
+//	@Before("execution(public String *.doSomething())")
+//	public void beforeSomething() {
+//		System.out.println("문을 열고 집에 들어간다.");
+//	}
+//
+//	@After("execution(String *.doSomething())")
+//	public void afterSomething() {
+//		System.out.println("문을 닫고 집을 나온다.");
+//	}
+//
+//	@AfterReturning(pointcut = "execution(String *.doSomething())", returning = "msg")
+//	public void afterReturning(String msg) {
+//		System.out.println("return 후!");
+//		System.out.println("리턴값 : " + msg);
+//	}
+//	
+//	@AfterThrowing(pointcut="execution(String *.doSomething())", throwing = "th")
+//	public void afterThrowing(Throwable th) {
+//		System.out.println("예외가 발생했슈!!");
+//		for(StackTraceElement e : th.getStackTrace()) {
+//		}
+//		
+//	}
 	
-	public String afterReturn(String msg) {
-		return "애프터 리턴:" + msg;
-	}
-	
-	public String afterThrowing(Throwable th) {
-		System.out.println("집이 터졌슈!!");
-		
-		return "예외 발생";
-	}
-	
-	//핵심기능을 감싸서 실행함
-	public String myAround(ProceedingJoinPoint jp) {
-		
+//	위에를 주석처리하고 실행
+	@Around("execution(String *.doSomething())")
+	public String around(ProceedingJoinPoint pjp){		
 		try {
-			System.out.println("비포");
-			//핵심기능의 실행하려던 메서드
-			String result= (String)jp.proceed();
-			System.out.println("애프터");
-			System.out.println("joinPoint proceed() 결과 : " + result);
-			
-		}catch(Throwable e) {
-			e.printStackTrace();
-			System.out.println("애프터 쓰로우");
+			System.out.println("집에 들어간다.");
+			return (String)pjp.proceed();
+		} catch (Throwable e) {
+			System.out.println("예외가 발생했슈!");
+			return "예외!!";
+		}finally {
+			System.out.println("집을 나온다.");
 		}
 		
-		return "test";
 	}
 }

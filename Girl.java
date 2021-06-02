@@ -1,5 +1,9 @@
-package spring03.aop.ex02;
+package spring03.aop.ex03.annotation;
+
+import org.springframework.stereotype.Component;
+
 //핵심 기능을 갖은 클래스
+@Component
 public class Girl {
 	public String doSomething() {
 //		System.out.println("문을 열고 집에 들어간다.");
