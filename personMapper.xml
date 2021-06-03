@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  <!-- sql 맵퍼 -->
+<mapper namespace="personSession">
+	<!-- 원래는 파라미터 타입에 패키지를 넣어줘야되는데
+	설정파일에 알리아스를 Person으로 지정해줬기 때문에 가능한 것 -->
+	<insert id="insertPerson" parameterType="Person">
+	
+		insert into person(id,name,age)
+		<!-- Person 객체의 필드명을 적는 것임.
+		기본적으로 getter, setter를 사용함 -->
+		values(#{id},#{name},#{age})
+	</insert>
+	
+	 <!-- 필드명이랑 컬럼명이 동일해야 자동으로 형변환해서 넣어준다 -->
+	<select id="selectPersonList" resultType="Person">
+	
+		select id,name,age
+		from person
+	
+	</select>
+	
+	<!-- 객체로 받을게 아니면 굳이 파라미터 타입을 적지 않아도 됨. -->
+	<delete id="deletePerson" parameterType="Person">
+		delete from person where id =#{id}
+	</delete>
+	
+	<!-- int로 적어도 되고 안적어도됨! -->
+	<select id="selectPersonById" resultType ="Person">
+		select id, name, age from person where id = #{id}
+	</select>
+	
+	<update id="updatePerson" parameterType="Person">
+		update person name=#{name}, age=#{age} 
+		where id =#{id}
+	</update>
+</mapper>
