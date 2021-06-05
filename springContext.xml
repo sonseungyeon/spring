@@ -2,38 +2,24 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
-	<!-- springContext.xml -->
 
-	<!-- spring jdbc로 db접속 정보를 넣어 빈으로 생성 -->
-	<!-- DMDS를 입력 후 컨트롤 + 스페이스 -->
-	<bean id = "dataSource" class= "org.springframework.jdbc.datasource.DriverManagerDataSource">
-		<!-- 접속정보를 넣어준다 -->
-		<!-- 클래스이름 -->
-		<property name="driverClassName" value="com.mysql.cj.jdbc.Driver"></property>
-		<!-- url -->
-		<property name="url" value="jdbc:mysql://localhost:3306/tj_b?serverTimezone=Asia/Seoul&amp;characterEncoding=utf-8"></property>
-		<!-- user -->
-		<property name="username" value="root"></property>
-		<!-- password -->
-		<property name="password" value="mysql"></property>
+	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="com.mysql.cj.jdbc.Driver"/>
+		<property name="url" value="jdbc:mysql://localhost:3306/tj_b?serverTimezone=Asia/Seoul&amp;characterEncoding=utf-8"/>
+		<property name="username" value="root"/>
+		<property name="password" value="mysql"/>
 	</bean>
 	
-	<!-- mybatis에 datasource를 넣어 빈으로 만든다. -->
-	<!-- SSFB를 입력 후 컨트롤 스페이스 -->
 	<bean id="sqlSessionFactoryBean" class="org.mybatis.spring.SqlSessionFactoryBean">
-		<!-- database접속 dataSource셋팅 -->
-		<property name="dataSource" ref="dataSource"></property>
-		<!-- 마이바티스 설정파일 셋팅 -->
-		<property name="configLocation" value="classpath:spring04_mybatis/mybatisConfig.xml"></property>
-		<!-- 마이바티스 매퍼파일 셋팅 -->
+		<property name="dataSource" ref="dataSource"/>
+		<property name="configLocation" value="classpath:spring04_mybatis_ex/mybatisConfig.xml"></property>
 		<property name="mapperLocations">
 			<list>
-				<value>classpath:spring04_mybatis/personMapper.xml</value>
+				<value>classpath:spring04_mybatis_ex/userMapper.xml</value>
 			</list>
 		</property>
 	</bean>
 	
-	<!-- sqlSessionTemplate -->
 	<bean class="org.mybatis.spring.SqlSessionTemplate">
 		<constructor-arg ref="sqlSessionFactoryBean"/>
 	</bean>
