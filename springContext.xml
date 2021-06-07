@@ -1,26 +1,69 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mybatis-spring="http://mybatis.org/schema/mybatis-spring"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://mybatis.org/schema/mybatis-spring http://mybatis.org/schema/mybatis-spring-1.2.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
 
-	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-		<property name="driverClassName" value="com.mysql.cj.jdbc.Driver"/>
-		<property name="url" value="jdbc:mysql://localhost:3306/tj_b?serverTimezone=Asia/Seoul&amp;characterEncoding=utf-8"/>
-		<property name="username" value="root"/>
-		<property name="password" value="mysql"/>
+	<!--  빈 스캔 -->
+	<context:component-scan base-package="service"/>
+
+	<!-- 디비 정보가 있는 프로퍼티파일을 추가 -->
+	<context:property-placeholder
+		location="classpath:config/mysql_value.properties" />
+
+	<!-- 스프링 jdbc로 접속 -->
+	<bean id="dataSource"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="${mysql.driverClass}" />
+		<property name="url" value="${mysql.url}" />
+		<property name="username" value="${mysql.username}" />
+		<property name="password" value="${mysql.password}" />
 	</bean>
-	
-	<bean id="sqlSessionFactoryBean" class="org.mybatis.spring.SqlSessionFactoryBean">
-		<property name="dataSource" ref="dataSource"/>
-		<property name="configLocation" value="classpath:spring04_mybatis_ex/mybatisConfig.xml"></property>
+
+	<!-- mybatis도 추가 -->
+	<bean id="sqlSessionFactoryBean"
+		class="org.mybatis.spring.SqlSessionFactoryBean">
+		<!-- dataSource -->
+		<property name="dataSource" ref="dataSource" />
+		<!-- mybatis config -->
+		<property name="configLocation"
+			value="classpath:config/mybatisConfig.xml" />
+		<!-- mybatis mapper -->
 		<property name="mapperLocations">
 			<list>
-				<value>classpath:spring04_mybatis_ex/userMapper.xml</value>
+				<value>classpath:mapper/customerMapper.xml</value>
 			</list>
 		</property>
 	</bean>
+
+	<!-- 매퍼를 스캔함 -->
+	<mybatis-spring:scan base-package="mapper"/>
 	
-	<bean class="org.mybatis.spring.SqlSessionTemplate">
-		<constructor-arg ref="sqlSessionFactoryBean"/>
+	<!-- 트랜젝션을 추가하기 위한 셋팅 DSTM 컨트롤 + 스페이스 -->
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource"></property>
 	</bean>
+	
+	<!-- aspect할 때 그 객체에 붙여주는 것이 advice가 하는 역할임
+	<tx:advice id="txAdvice" transaction-manager="transactionManager">
+		<tx:attributes>
+		하나라도 exception이 발생하면 rollback을 하겠다.라는 의미임
+			<tx:method name="deleteCustomerAndOrders" rollback-for="Exception"/>
+		</tx:attributes>
+	</tx:advice>
+	
+	<aop:config>
+		<aop:pointcut expression="execution(public int deleteCustomerAndOrders(..))" id="myPt"/>
+		<aop:advisor advice-ref="txAdvice" pointcut-ref="myPt"/>
+	</aop:config> -->
+	
+	<!-- 어노테이션으로 트랜잭션을 추가하는 방법 -->
+	<tx:annotation-driven/>
 </beans>

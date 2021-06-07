@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  <!-- 연동하려는 아이의 패키지명과 클래스명 or 인터페이스명을 써줘야함 -->
+<mapper namespace="mapper.CustomerWithOrders">
+	<resultMap type="Customer" id="cwo">
+		<id property="id" column="id"/>
+		<result property="name" column="name"/>
+ 		<!-- id를 이용해서 select를 조회한다음 orderList에 담겠다. -->
+		<collection property="orderList" column="id" select="selectOrderById"/>
+	</resultMap>
+	<select id="selectCustomerWithOrders" resultMap="cwo">
+		select id, name from customer where id =#{id}
+	</select>
+	<select id="selectOrderById" resultType="Order">
+		select id, customer_id, name, order_datetime from orders
+		where customer_id=#{id}
+	</select>
+	
+	<!-- 객체의 id 필드가 키로 사용된다. -->
+	<!-- insert된 데이터의 키값을 리턴 받을 수 있음 -->
+	<insert id="insertOrder" parameterType="Order" useGeneratedKeys="true" keyProperty="id">
+		insert into orders(id,customer_id,name,order_datetime) 
+		values(#{id},#{customerId}, #{name}, #{orderDatetime})
+	</insert>
+	
+	<delete id="deleteCustomer">
+		delete from customer where id=#{id}
+	</delete>
+	
+	<delete id="deleteOrdersWithCustomerId">
+		delete from orders where customer_id=#{id}
+	</delete>
+</mapper>
