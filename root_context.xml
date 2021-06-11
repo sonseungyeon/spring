@@ -1,37 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns:aop="http://www.springframework.org/schema/aop"
-	xmlns:mvc="http://www.springframework.org/schema/mvc"
-	xmlns:mybatis-spring="http://mybatis.org/schema/mybatis-spring"
 	xmlns:context="http://www.springframework.org/schema/context"
-	xmlns:tx="http://www.springframework.org/schema/tx"
-	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd
-		http://mybatis.org/schema/mybatis-spring http://mybatis.org/schema/mybatis-spring-1.2.xsd
+	xmlns:mybatis-spring="http://mybatis.org/schema/mybatis-spring"
+	xsi:schemaLocation="http://mybatis.org/schema/mybatis-spring http://mybatis.org/schema/mybatis-spring-1.2.xsd
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
-		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
-		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
 
-	<!-- 컨트롤러를 어노테이션으로 등록 -->
-	<context:component-scan base-package="com.myapp.marvel">
-		<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
-	</context:component-scan>
-	
-	<!-- 데이터베이스 접속정보 셋팅 -->
+	<!-- 데이터베이스 연동을 하기위한 접속정보를 가져옴 -->
 	<context:property-placeholder location="/WEB-INF/config/mysql_db.properties"/>
 	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-		<property name="driverClassName" value="${db.driverClass}"/>
-		<property name="url" value="${db.url}"/>
-		<property name="username" value="${db.username}"/>
-		<property name="password" value="${db.password}"/>
-	</bean>
-
-	<!-- 마이바티스 접속 -->
-	<bean id="sqlSessionFactoryBean" class="org.mybatis.spring.SqlSessionFactoryBean">
-		<property name="configLocation" value="/WEB-INF/config/mybatis_config.xml"></property>
-		<property name="dataSource" ref="dataSource"></property>
+		<property name="driverClassName" value="${db.driverClass}"></property>
+		<property name="url" value="${db.url}"></property>
+		<property name="username" value="${db.username}"></property>
+		<property name="password" value="${db.password}"></property>
 	</bean>
 	
+	<!-- 마이바티스 설정
+		- 가져온 데이터베이스 접속정보를 전달해줌
+		- 마이바티스 설정 경로를 지정해줌
+	 -->
+	 <bean id="sqlSessionFactoryBean" class="org.mybatis.spring.SqlSessionFactoryBean">
+	 <!-- ref 는 참조변수 -->
+	 	<property name="dataSource" ref="dataSource"></property>
+	 	<property name="configLocation" value="/WEB-INF/config/mybatis_config.xml"></property>
+	 </bean>
+	 
+	<!-- 맵퍼 스캔=> 마이바티스의 기능 -->
 	<mybatis-spring:scan base-package="com.myapp.marvel"/>
+	
+	<!-- 컨트롤러를 제외한 Context 스캔 -->
+	<context:component-scan base-package="com.myapp.marvel">
+		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+	</context:component-scan>
+	
 </beans>

@@ -3,13 +3,18 @@
   PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-config.dtd">
   
+<!-- 카멜표기! -->
 <configuration>
-	<settings>
-		<setting name="mapUnderscoreToCamelCase" value="true"/>
-		
-		<setting name="useGeneratedKeys" value="true"/>
-	</settings>
-	<typeAliases>
-		<typeAlias type="com.myapp.marvel.MarvelMovie" alias="MarvelMovie"/>
-	</typeAliases>
+<settings>
+<!-- 카멜표기로 해도 변수명을 맞춰주기 위함. -->
+	<setting name="mapUnderscoreToCamelCase" value="true"/>
+	<!-- db의 프라이머리 키값이 어떤건지 java에 알려주기 위함. -->
+	<!-- 키 자동설정 -->
+	<setting name="useGeneratedKeys" value="true"/>
+</settings>
+<typeAliases>
+	<!-- 클래스명 단축 설정 -->
+	<typeAlias type="com.myapp.marvel.Marvel" alias="Marvel"/>
+</typeAliases>
 </configuration>
+

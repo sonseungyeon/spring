@@ -7,14 +7,19 @@
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
 
+	<!-- 컨트롤러에 관한 세팅 -->
+	<!-- 컨트롤러를 스캔해줘서 객체로 등록해줘야 함 -->
 	<context:component-scan base-package="com.myapp.marvel">
 		<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
 	</context:component-scan>
 	
+	<!-- 화면의 prefix(접두사), suffix(접미사)를 붙여준다.
+	중복되는 것을 줄이고 짧게 쓰기 위해서 -->
 	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-		<property name="prefix" value="/WEB-INF/view/marvel/"></property>
+		<property name="prefix" value="/WEB-INF/view/"></property>
 		<property name="suffix" value=".jsp"></property>
 	</bean>
 	
 	<mvc:annotation-driven/>
+
 </beans>
