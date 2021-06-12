@@ -9,10 +9,8 @@ public class Marvel {
 	private int marvelId;
 	private String title;
 	private String titleEng;
-	@DateTimeFormat(pattern="yyyy-MM-dd")
 	private LocalDate releaseDate;
 	private long worldBoxOffice;
-	@DateTimeFormat(pattern="yyyy-MM-dd'T'HH:mm:ss")
 	private LocalDateTime writeDate;
 	private LocalDateTime updateDate;
 	
